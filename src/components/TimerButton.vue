@@ -17,7 +17,7 @@ export default defineComponent({
 
 <style scoped>
 button {
-  margin-top: 25px; 
+  margin-top: 30px; 
   font-size: 25px;
 }
 </style>
