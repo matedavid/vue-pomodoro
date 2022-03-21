@@ -6,7 +6,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "own-button",
+  name: "timer-button",
   components: {},
   props: {
     text: String
@@ -16,5 +16,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+button {
+  margin-top: 25px; 
+  font-size: 25px;
+}
 </style>
