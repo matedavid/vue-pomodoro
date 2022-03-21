@@ -6,7 +6,7 @@
         background: `conic-gradient(var(--purple-secondary) ${perc * 3.6}deg, var(--black-light) ${perc * 3.6}deg)`,
       }"
     >
-      <div class="value-container">{{ value }}</div>
+      <div class="value-container">{{ currentTimer }}</div>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "rounded-timer",
   props: {
-    value: Number,
+    currentTimer: String,
     perc: Number,
   }
 });
@@ -33,7 +33,6 @@ export default defineComponent({
   position: relative;
   height: 230px;
   width: 230px;
-  background-color: var(--purple-secondary);
 
   border-radius: 50%;
 

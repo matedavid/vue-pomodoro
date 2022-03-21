@@ -1,5 +1,5 @@
 <template>
-  <button @click="$emit('button-clicked')">{{ text }}</button>
+  <button @click="$emit('button-clicked')">{{ !timerRunning ? "Start" : "Stop" }}</button>
 </template>
 
 <script lang="ts">
@@ -9,7 +9,7 @@ export default defineComponent({
   name: "timer-button",
   components: {},
   props: {
-    text: String,
+    timerRunning: Boolean,
   },
 });
 </script>

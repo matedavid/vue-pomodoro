@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <rounded-timer value="25" perc="50" />
-    <timer-button @button-clicked="buttonClicked" text="Start" />
+    <rounded-timer :currentTimer="timerTextDisplay" :perc="progress" />
+    <timer-button @button-clicked="buttonClicked" :timerRunning="timerRunning" />
   </div>
 </template>
 
@@ -11,6 +11,24 @@ import { defineComponent } from "vue";
 import TimerButton from "./components/TimerButton.vue";
 import RoundedTimer from "./components/RoundedTimer.vue";
 
+function currentTimerAsDisplayText(seconds: number): string {
+  let minutes = Math.floor(seconds / 60);
+  let secs = seconds - minutes*60;
+
+  let displayString = "";
+  if (minutes < 10) {
+    displayString += "0";
+  }
+  displayString += `${minutes}:`;
+
+  if (secs < 10) {
+    displayString += "0";
+  }
+  displayString += `${secs}`;
+
+  return displayString;
+}
+
 export default defineComponent({
   name: "App",
   components: {
@@ -19,24 +37,40 @@ export default defineComponent({
   },
   data() {
     return {
-      progressValue: 10,
-      limitProgress: 0,
+      startingTimerSeconds: 0,
+      currentTimerSeconds: 0,
+      timerTextDisplay: "",
+      progress: 100,
+
+      timerRunning: false,
       interval: -1,
     };
   },
   created() {
-    //this.interval = setInterval(this.increaseProgress, 1000);
+    this.startingTimerSeconds = 25*60; // 25 minutes starting timer
+    this.currentTimerSeconds = this.startingTimerSeconds;
+    this.timerTextDisplay = currentTimerAsDisplayText(this.currentTimerSeconds);
   },
   methods: {
-    increaseProgress() {
-      this.progressValue--;
+    decreaseSecond() {
+      this.currentTimerSeconds--;
+      this.progress = this.currentTimerSeconds/this.startingTimerSeconds * 100;
 
-      if (this.progressValue == this.limitProgress) {
+      this.timerTextDisplay = currentTimerAsDisplayText(this.currentTimerSeconds);
+
+      if (this.currentTimerSeconds == 0) {
+        console.log("Timer finished");
         clearInterval(this.interval);
       }
     },
     buttonClicked() {
-      console.log(this.progressValue);
+      if (!this.timerRunning) {
+        this.interval = setInterval(this.decreaseSecond, 1000);
+        this.timerRunning = true;
+      } else if (confirm("You sure you want to stop it?")) {
+        clearInterval(this.interval);
+        this.timerRunning = false;
+      }
     },
   },
 });
@@ -62,7 +96,7 @@ body {
   background-color: var(--black-dark);
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 50%;
+  margin-top: 300px;
   left: 50%;
   border-radius: 8px;
   box-shadow: 20px 20px 20px var(--black-dark);
