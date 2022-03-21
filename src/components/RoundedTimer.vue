@@ -31,8 +31,8 @@ export default defineComponent({
 
 .circular-progress {
   position: relative;
-  height: 250px;
-  width: 250px;
+  height: 230px;
+  width: 230px;
   background-color: var(--purple-secondary);
 
   border-radius: 50%;
@@ -44,8 +44,8 @@ export default defineComponent({
 .circular-progress:before {
   content: "";
   position: absolute;
-  height: 84%;
-  width: 84%;
+  height: 88%;
+  width: 88%;
   background-color: var(--black-dark);
   border-radius: 50%;
 }

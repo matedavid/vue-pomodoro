@@ -1,5 +1,5 @@
 <template>
-  <button>{{ text }}</button>
+  <button @click="$emit('button-clicked')">{{ text }}</button>
 </template>
 
 <script lang="ts">
@@ -9,15 +9,25 @@ export default defineComponent({
   name: "timer-button",
   components: {},
   props: {
-    text: String
-  }
-
+    text: String,
+  },
 });
 </script>
 
 <style scoped>
 button {
-  margin-top: 30px; 
+  margin-top: 35px;
   font-size: 25px;
+
+  background-color: var(--purple-primary); /* Green */
+  border: none;
+  color: white;
+  padding: 15px 50px;
+  border-radius: 5%;
 }
+
+button:hover {
+  box-shadow: 0 5px 10px var(--purple-secondary);
+}
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <rounded-timer value=25 perc=50 />
-    <timer-button text="Start" />
+    <rounded-timer value="25" perc="50" />
+    <timer-button @button-clicked="buttonClicked" text="Start" />
   </div>
 </template>
 
@@ -21,8 +21,11 @@ export default defineComponent({
     return {
       progressValue: 10,
       limitProgress: 0,
-      interval: -1
+      interval: -1,
     };
+  },
+  created() {
+    //this.interval = setInterval(this.increaseProgress, 1000);
   },
   methods: {
     increaseProgress() {
@@ -32,20 +35,20 @@ export default defineComponent({
         clearInterval(this.interval);
       }
     },
-  },
-  created() {
-    this.interval = setInterval(this.increaseProgress, 1000);
+    buttonClicked() {
+      console.log(this.progressValue);
+    },
   },
 });
 </script>
 
 <style>
 :root {
-  --black-light: #3C3C3C;
+  --black-light: #3c3c3c;
   --black-dark: #292929;
-  --purple-primary: #3500C4;
-  --purple-secondary: #440BDE;
-  --red-gradient: #BD0707;
+  --purple-primary: #3500c4;
+  --purple-secondary: #440bde;
+  --red-gradient: #bd0707;
 }
 
 body {
@@ -63,8 +66,6 @@ body {
   left: 50%;
   border-radius: 8px;
   box-shadow: 20px 20px 20px var(--black-dark);
-
   text-align: center;
 }
-
 </style>
