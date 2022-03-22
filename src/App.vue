@@ -87,19 +87,21 @@ export default defineComponent({
 
 body {
   background-color: var(--black-light);
+  display: grid;
+  place-items: center;
 }
 
 .container {
+  margin-top: 50px;
   padding-top: 25px;
+
   height: 350px;
   width: 400px;
-  background-color: var(--black-dark);
-  position: absolute;
-  transform: translate(-50%, -50%);
-  margin-top: 300px;
-  left: 50%;
+
   border-radius: 8px;
   box-shadow: 20px 20px 20px var(--black-dark);
+
+  background-color: var(--black-dark);
   text-align: center;
 }
 </style>
