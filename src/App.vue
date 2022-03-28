@@ -1,7 +1,21 @@
 <template>
-  <div class="container">
-    <rounded-timer :currentTimer="timerTextDisplay" :perc="progress" />
-    <timer-button @button-clicked="buttonClicked" :timerRunning="timerRunning" />
+  <div class="toolbar">
+    <i class="fa-solid fa-gear" @click="toggleModal"></i>
+  </div>
+  <settings-modal
+    v-if="showSettingsModal"
+    :currentStartingTime="startingTimerSeconds / 60"
+    :currentRestTime="5"
+    @modal-close="toggleModal"
+  />
+  <div class="content-container">
+    <div class="container">
+      <rounded-timer :currentTimerSeconds="currentTimerSeconds" :perc="progress" />
+      <timer-button
+        @button-clicked="buttonClicked"
+        :timerRunning="timerRunning"
+      />
+    </div>
   </div>
 </template>
 
@@ -10,53 +24,36 @@ import { defineComponent } from "vue";
 
 import TimerButton from "./components/TimerButton.vue";
 import RoundedTimer from "./components/RoundedTimer.vue";
-
-function currentTimerAsDisplayText(seconds: number): string {
-  let minutes = Math.floor(seconds / 60);
-  let secs = seconds - minutes*60;
-
-  let displayString = "";
-  if (minutes < 10) {
-    displayString += "0";
-  }
-  displayString += `${minutes}:`;
-
-  if (secs < 10) {
-    displayString += "0";
-  }
-  displayString += `${secs}`;
-
-  return displayString;
-}
+import SettingsModal from "./components/SettingsModal.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     TimerButton,
     RoundedTimer,
+    SettingsModal,
   },
   data() {
     return {
       startingTimerSeconds: 0,
       currentTimerSeconds: 0,
-      timerTextDisplay: "",
       progress: 100,
 
       timerRunning: false,
       interval: -1,
+
+      showSettingsModal: false,
     };
   },
   created() {
-    this.startingTimerSeconds = 25*60; // 25 minutes starting timer
+    this.startingTimerSeconds = 25 * 60; // 25 minutes starting timer
     this.currentTimerSeconds = this.startingTimerSeconds;
-    this.timerTextDisplay = currentTimerAsDisplayText(this.currentTimerSeconds);
   },
   methods: {
     decreaseSecond() {
       this.currentTimerSeconds--;
-      this.progress = this.currentTimerSeconds/this.startingTimerSeconds * 100;
-
-      this.timerTextDisplay = currentTimerAsDisplayText(this.currentTimerSeconds);
+      this.progress =
+        (this.currentTimerSeconds / this.startingTimerSeconds) * 100;
 
       if (this.currentTimerSeconds == 0) {
         console.log("Timer finished");
@@ -71,6 +68,9 @@ export default defineComponent({
         clearInterval(this.interval);
         this.timerRunning = false;
       }
+    },
+    toggleModal() {
+      this.showSettingsModal = !this.showSettingsModal;
     },
   },
 });
@@ -87,12 +87,16 @@ export default defineComponent({
 
 body {
   background-color: var(--black-light);
+}
+
+.content-container {
+  width: 100%;
   display: grid;
   place-items: center;
 }
 
 .container {
-  margin-top: 50px;
+  margin-top: 35px;
   padding-top: 25px;
 
   height: 350px;
@@ -103,5 +107,17 @@ body {
 
   background-color: var(--black-dark);
   text-align: center;
+}
+
+.toolbar {
+  width: 100%;
+  display: grid;
+  place-items: end;
+}
+
+i {
+  font-size: 25px;
+  padding-top: 10px;
+  padding-right: 15px;
 }
 </style>
