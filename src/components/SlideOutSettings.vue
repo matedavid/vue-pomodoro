@@ -2,7 +2,9 @@
   <div class="slideout" :class="show ? 'on' : ''">
     <div class="header">
       <h1 class="settings-title">Settings</h1>
-      <i class="fa-solid fa-xmark exit-icon" @click="$emit('modal-close')"></i>
+      <div class="exit-icon">
+        <i class="fa-solid fa-xmark" @click="$emit('modal-close')"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +44,7 @@ export default defineComponent({
 
 .header {
   display: grid;
-  grid-template-areas: "title title title title title title title icon";
+  grid-template-areas: "title icon";
 }
 
 .settings-title {
@@ -54,5 +56,6 @@ export default defineComponent({
   margin-top: 22px;
   grid-area: icon;
   color: var(--purple-secondary);
+  text-align: end;
 }
 </style>
