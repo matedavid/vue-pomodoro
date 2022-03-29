@@ -2,12 +2,6 @@
   <div class="toolbar">
     <i class="fa-solid fa-gear" @click="toggleModal"></i>
   </div>
-  <settings-modal
-    v-if="showSettingsModal"
-    :currentStartingTime="startingTimerSeconds / 60"
-    :currentRestTime="5"
-    @modal-close="toggleModal"
-  />
   <div class="content-container">
     <div class="container">
       <rounded-timer :currentTimerSeconds="currentTimerSeconds" :perc="progress" />
@@ -17,6 +11,7 @@
       />
     </div>
   </div>
+  <settings-slide-out :show="showSettings" />
 </template>
 
 <script lang="ts">
@@ -24,14 +19,14 @@ import { defineComponent } from "vue";
 
 import TimerButton from "./components/TimerButton.vue";
 import RoundedTimer from "./components/RoundedTimer.vue";
-import SettingsModal from "./components/SettingsModal.vue";
+import SettingsSlideOut from "./components/SlideOutSettings.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     TimerButton,
     RoundedTimer,
-    SettingsModal,
+    SettingsSlideOut,
   },
   data() {
     return {
@@ -42,7 +37,7 @@ export default defineComponent({
       timerRunning: false,
       interval: -1,
 
-      showSettingsModal: false,
+      showSettings: false,
     };
   },
   created() {
@@ -70,7 +65,7 @@ export default defineComponent({
       }
     },
     toggleModal() {
-      this.showSettingsModal = !this.showSettingsModal;
+      this.showSettings = !this.showSettings;
     },
   },
 });
