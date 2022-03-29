@@ -4,14 +4,24 @@
   </div>
   <div class="content-container">
     <div class="container">
-      <rounded-timer :currentTimerSeconds="currentTimerSeconds" :perc="progress" />
+      <rounded-timer
+        :currentTimerSeconds="currentTimerSeconds"
+        :perc="progress"
+      />
       <timer-button
         @button-clicked="buttonClicked"
         :timerRunning="timerRunning"
       />
     </div>
   </div>
-  <settings-slide-out :show="showSettings" @modal-close="toggleModal" />
+  <settings-slide-out
+    :show="showSettings"
+    @settings-close="toggleModal"
+    @settings-save="updateSettings"
+    :currentStartingTime="startingTimerSeconds / 60"
+    :currentRestTime="5"
+    :currentLongRestTime="15"
+  />
 </template>
 
 <script lang="ts">
@@ -30,8 +40,11 @@ export default defineComponent({
   },
   data() {
     return {
-      startingTimerSeconds: 0,
-      currentTimerSeconds: 0,
+      startingTimerSeconds: 25 * 60, // 25 minutes
+      shortRestTimeSeconds: 5 * 60,  // 5 minutes
+      longRestTimeSeconds: 15 * 60,  // 15 minutes
+
+      currentTimerSeconds: 25 * 60,  // same as startingTimer
       progress: 100,
 
       timerRunning: false,
@@ -39,10 +52,6 @@ export default defineComponent({
 
       showSettings: false,
     };
-  },
-  created() {
-    this.startingTimerSeconds = 25 * 60; // 25 minutes starting timer
-    this.currentTimerSeconds = this.startingTimerSeconds;
   },
   methods: {
     decreaseSecond() {
@@ -67,6 +76,17 @@ export default defineComponent({
     toggleModal() {
       this.showSettings = !this.showSettings;
     },
+    updateSettings(data: {'pomodoroTime': number, 'shortRestTime': number, 'longRestTime': number}) {
+      if (this.timerRunning) {
+        alert("Can't change configuration while the timer is running");
+        return;
+      }
+
+      this.startingTimerSeconds = data.pomodoroTime * 60;
+      this.shortRestTimeSeconds = data.shortRestTime * 60;
+      this.longRestTimeSeconds = data.longRestTime * 60;
+      this.currentTimerSeconds = this.startingTimerSeconds;
+    },
   },
 });
 </script>
@@ -78,6 +98,8 @@ export default defineComponent({
   --purple-primary: #3500c4;
   --purple-secondary: #440bde;
   --red-gradient: #bd0707;
+
+  --settings-input-font-size: 20px;
 }
 
 body {

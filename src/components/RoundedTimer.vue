@@ -37,7 +37,7 @@ function currentTimerAsDisplayText(seconds: number): string {
 export default defineComponent({
   name: "rounded-timer",
   props: {
-    currentTimerSeconds: String,
+    currentTimerSeconds: Number,
     perc: Number,
   },
   methods: {
