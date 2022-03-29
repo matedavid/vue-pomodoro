@@ -11,7 +11,7 @@
       />
     </div>
   </div>
-  <settings-slide-out :show="showSettings" />
+  <settings-slide-out :show="showSettings" @modal-close="toggleModal" />
 </template>
 
 <script lang="ts">

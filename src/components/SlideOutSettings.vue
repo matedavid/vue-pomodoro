@@ -1,6 +1,9 @@
 <template>
   <div class="slideout" :class="show ? 'on' : ''">
-    <h1 class="settings_title">Settings</h1>
+    <div class="header">
+      <h1 class="settings-title">Settings</h1>
+      <i class="fa-solid fa-xmark exit-icon" @click="$emit('modal-close')"></i>
+    </div>
   </div>
 </template>
 
@@ -37,8 +40,19 @@ export default defineComponent({
   right: 0;
 }
 
-.settings_title {
+.header {
+  display: grid;
+  grid-template-areas: "title title title title title title title icon";
+}
+
+.settings-title {
   color: white;
   margin-left: 15px;
+  grid-area: title;
+}
+.exit-icon {
+  margin-top: 22px;
+  grid-area: icon;
+  color: var(--purple-secondary);
 }
 </style>
