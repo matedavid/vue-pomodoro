@@ -1,6 +1,6 @@
 <template>
   <div class="toolbar">
-    <i class="fa-solid fa-gear" @click="toggleModal"></i>
+    <i class="fa-solid fa-gear settings-icon" @click="toggleModal"></i>
   </div>
   <div class="content-container">
     <div class="container">
@@ -41,10 +41,10 @@ export default defineComponent({
   data() {
     return {
       startingTimerSeconds: 25 * 60, // 25 minutes
-      shortRestTimeSeconds: 5 * 60,  // 5 minutes
-      longRestTimeSeconds: 15 * 60,  // 15 minutes
+      shortRestTimeSeconds: 5 * 60, // 5 minutes
+      longRestTimeSeconds: 15 * 60, // 15 minutes
 
-      currentTimerSeconds: 25 * 60,  // same as startingTimer
+      currentTimerSeconds: 25 * 60, // same as startingTimer
       progress: 100,
 
       timerRunning: false,
@@ -76,7 +76,11 @@ export default defineComponent({
     toggleModal() {
       this.showSettings = !this.showSettings;
     },
-    updateSettings(data: {'pomodoroTime': number, 'shortRestTime': number, 'longRestTime': number}) {
+    updateSettings(data: {
+      pomodoroTime: number;
+      shortRestTime: number;
+      longRestTime: number;
+    }) {
       if (this.timerRunning) {
         alert("Can't change configuration while the timer is running");
         return;
@@ -132,7 +136,7 @@ body {
   place-items: end;
 }
 
-i {
+.settings-icon {
   font-size: 25px;
   padding-top: 10px;
   padding-right: 15px;

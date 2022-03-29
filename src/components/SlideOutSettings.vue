@@ -94,7 +94,9 @@ header {
 .exit-icon {
   grid-area: icon;
 
+  font-size: 25px;
   margin-top: 22px;
+  margin-right: 15px;
   color: var(--purple-secondary);
   text-align: end;
 }
