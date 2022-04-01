@@ -16,11 +16,11 @@
   </div>
   <settings-slide-out
     :show="showSettings"
-    @settings-close="toggleModal"
-    @settings-save="updateSettings"
     :currentStartingTime="startingTimerSeconds / 60"
     :currentRestTime="5"
     :currentLongRestTime="15"
+    @settings-close="toggleModal"
+    @settings-save="updateSettings"
   />
 </template>
 
@@ -30,6 +30,12 @@ import { defineComponent } from "vue";
 import TimerButton from "./components/TimerButton.vue";
 import RoundedTimer from "./components/RoundedTimer.vue";
 import SettingsSlideOut from "./components/SlideOutSettings.vue";
+
+enum TimerState {
+  Pomodoro,
+  ShortBreak,
+  LongBreak,
+}
 
 export default defineComponent({
   name: "App",
@@ -43,9 +49,13 @@ export default defineComponent({
       startingTimerSeconds: 25 * 60, // 25 minutes
       shortRestTimeSeconds: 5 * 60, // 5 minutes
       longRestTimeSeconds: 15 * 60, // 15 minutes
+      shortBreaksUntilLong: 3,
 
-      currentTimerSeconds: 25 * 60, // same as startingTimer
+      currentTimerSeconds: 25 * 60, // same as startingTimerSeconds
       progress: 100,
+
+      currentState: TimerState.Pomodoro,
+      numberShortBreaks: 0,
 
       timerRunning: false,
       interval: -1,
@@ -56,13 +66,59 @@ export default defineComponent({
   methods: {
     decreaseSecond() {
       this.currentTimerSeconds--;
-      this.progress =
-        (this.currentTimerSeconds / this.startingTimerSeconds) * 100;
 
-      if (this.currentTimerSeconds == 0) {
-        console.log("Timer finished");
+      if (this.currentTimerSeconds < 0) {
+        alert(
+          `${
+            this.currentState == TimerState.Pomodoro
+              ? "Pomodoro"
+              : this.currentState == TimerState.ShortBreak
+              ? "Short Break"
+              : "Long Break"
+          } finished`
+        );
         clearInterval(this.interval);
+
+        this.nextState();
       }
+
+      let dividend =
+        this.currentState == TimerState.Pomodoro
+          ? this.startingTimerSeconds
+          : this.currentState == TimerState.ShortBreak
+          ? this.shortRestTimeSeconds
+          : this.longRestTimeSeconds; // TimerState.LongBreak
+
+      this.progress = (this.currentTimerSeconds / dividend) * 100;
+    },
+    nextState() {
+      if (
+        this.currentState == TimerState.Pomodoro &&
+        this.numberShortBreaks < this.shortBreaksUntilLong
+      ) {
+        this.currentState = TimerState.ShortBreak;
+        ++this.numberShortBreaks;
+      } else if (
+        this.currentState == TimerState.Pomodoro &&
+        this.numberShortBreaks >= this.shortBreaksUntilLong
+      ) {
+        this.currentState = TimerState.LongBreak;
+        this.numberShortBreaks = 0;
+      } else if (
+        this.currentState == TimerState.ShortBreak ||
+        this.currentState == TimerState.LongBreak
+      ) {
+        this.currentState = TimerState.Pomodoro;
+      }
+
+      this.currentTimerSeconds =
+        this.currentState == TimerState.Pomodoro
+          ? this.startingTimerSeconds
+          : this.currentState == TimerState.ShortBreak
+          ? this.shortRestTimeSeconds
+          : this.longRestTimeSeconds; // TimerState.LongBreak
+
+      this.timerRunning = false;
     },
     buttonClicked() {
       if (!this.timerRunning) {
