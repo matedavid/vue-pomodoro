@@ -4,6 +4,7 @@
   </div>
   <div class="content-container">
     <div class="container">
+      <current-state :selection="currentState" />
       <rounded-timer
         :currentTimerSeconds="currentTimerSeconds"
         :perc="progress"
@@ -30,6 +31,7 @@ import { defineComponent } from "vue";
 import TimerButton from "./components/TimerButton.vue";
 import RoundedTimer from "./components/RoundedTimer.vue";
 import SettingsSlideOut from "./components/SlideOutSettings.vue";
+import CurrentState from "./components/CurrentState.vue"
 
 enum TimerState {
   Pomodoro,
@@ -43,6 +45,7 @@ export default defineComponent({
     TimerButton,
     RoundedTimer,
     SettingsSlideOut,
+    CurrentState
   },
   data() {
     return {
@@ -176,7 +179,6 @@ body {
   margin-top: 35px;
   padding-top: 25px;
 
-  height: 350px;
   width: 400px;
 
   border-radius: 8px;
@@ -184,6 +186,7 @@ body {
 
   background-color: var(--black-dark);
   text-align: center;
+  padding-bottom: 20px;
 }
 
 .toolbar {
